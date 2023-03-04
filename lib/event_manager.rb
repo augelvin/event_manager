@@ -31,7 +31,31 @@ end
 
 def clean_hour(date)
   time = Date._strptime(date, '%m/%d/%Y %H:%M')
-  h = time[:hour]
+  time[:hour]
+end
+
+def day(date)
+  time = Date._strptime(date, '%m/%d/%Y %H:%M')
+  day = Date.new(time[:year], time[:mon], time[:mday]).wday
+  day_name(day)
+end
+
+def day_name(day_n)
+  if day_n == 0
+    'Sunday'
+  elsif day_n == 1
+    'Monday'
+  elsif day_n == 2
+    'Tuesday'
+  elsif day_n == 3
+    'Wednesday'
+  elsif day_n == 4
+    'Thursday'
+  elsif day_n == 5
+    'Friday'
+  elsif day_n == 6
+    'Saturday'
+  end
 end
 
 def legislators_by_zipcode(zip)
@@ -77,9 +101,11 @@ contents.each do |row|
   legislators = legislators_by_zipcode(zipcode)
   phone_number = clean_phone_number(row[:homephone])
   reg_hours = clean_hour(row[:regdate])
+  reg_days = day(row[:regdate])
 
   puts phone_number
   puts reg_hours
+  puts reg_days
 
   form_letter = erb_template.result(binding)
 
