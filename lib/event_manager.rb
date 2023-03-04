@@ -93,21 +93,24 @@ contents = CSV.open(
 
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
+phone_numbers = []
+reg_hours = []
+reg_days = []
 
 contents.each do |row|
   id = row[0]
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
   legislators = legislators_by_zipcode(zipcode)
-  phone_number = clean_phone_number(row[:homephone])
-  reg_hours = clean_hour(row[:regdate])
-  reg_days = day(row[:regdate])
-
-  puts phone_number
-  puts reg_hours
-  puts reg_days
+  phone_numbers << clean_phone_number(row[:homephone])
+  reg_hours << clean_hour(row[:regdate])
+  reg_days << day(row[:regdate])
 
   form_letter = erb_template.result(binding)
 
   save_thank_you_letter(id,form_letter)
 end
+
+puts phone_numbers
+puts reg_hours.tally
+puts reg_days.tally
